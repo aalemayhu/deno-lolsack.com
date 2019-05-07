@@ -18,17 +18,7 @@ function braid(mappings, payload) {
 async function main() {
   // index.html is treated differently due to the macros inside it.
   const page = "./public/index.html";
-  const publicFiles = [
-    "/public/Roflcopter.gif",
-    "/public/android-chrome-192x192.png",
-    "/public/android-chrome-512x512.png",
-    "/public/apple-touch-icon.png",
-    "/public/favicon-16x16.png",
-    "/public/favicon-32x32.png",
-    "/public/favicon.ico",
-    "/public/site.webmanifest",
-    "/public/style.css"
-  ];
+  const publicFiles = Deno.readDirSync("./public").map(f => f.path);
   const mappings = {
     "{{deno}}": Deno.version.deno,
     "{{v8}}": Deno.version.v8,
@@ -37,7 +27,7 @@ async function main() {
   console.log('Serving on http://0.0.0.0:8000');
   for await (const req of s) {
     console.log("request to " + req.url);
-    if (publicFiles.includes(req.url)) {
+    if (publicFiles.includes(`.${req.url}`)) {
       await sendFile(req);
       continue;
     }
