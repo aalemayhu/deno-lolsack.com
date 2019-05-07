@@ -16,15 +16,15 @@ function braid(mappings, payload) {
 }
 
 async function main() {
+  const publicFiles = Deno.readDirSync("./public").map(f => f.path);
   // index.html is treated differently due to the macros inside it.
   const page = "./public/index.html";
-  const publicFiles = Deno.readDirSync("./public").map(f => f.path);
   const mappings = {
     "{{deno}}": Deno.version.deno,
     "{{v8}}": Deno.version.v8,
     "{{typescript}}": Deno.version.typescript
   };
-  console.log('Serving on http://0.0.0.0:8000');
+  console.log("Serving on http://0.0.0.0:8000");
   for await (const req of s) {
     console.log("request to " + req.url);
     if (publicFiles.includes(`.${req.url}`)) {
