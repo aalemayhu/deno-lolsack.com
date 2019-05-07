@@ -34,6 +34,7 @@ async function main() {
     "{{v8}}": Deno.version.v8,
     "{{typescript}}": Deno.version.typescript
   };
+  console.log('Serving on http://0.0.0.0:8000');
   for await (const req of s) {
     console.log("request to " + req.url);
     if (publicFiles.includes(req.url)) {
